@@ -1,0 +1,32 @@
+#!/bin/bash
+echo "Please make sure that you are connected to the internet "
+read -p "Do you want to see the current status of the repo ? [y/Y]" resp
+if [ $resp = "y" -o $resp = "Y" ];then
+	echo "Displaying the current status of the repo "
+	git status
+fi
+echo -n "Add all changes to the commit ? " 
+read resp
+if [ $resp = "y" -o $resp = "Y" ]
+then 
+	echo "Adding changes to commit"
+	git add -A
+	if [ $? == 0 ]
+	then
+		echo "Added changes"
+	else
+		echo "Failed to add changes to commit"
+	fi
+fi
+read -p  "Enter the commit message " resp
+echo "Commiting"
+git commit -m "$resp"
+echo "Pushing to master"
+git push origin master
+if [ $? == 0 ]
+then 
+	echo "Successfully pushed to master"
+else
+	echo "Try Again"
+fi
+
