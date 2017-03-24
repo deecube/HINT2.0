@@ -21,7 +21,7 @@ counter = 0
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(15,GPIO.IN)
 # Variables for MySQL
-db = MySQLdb.connect(host="localhost", user="username",passwd="password", db="temp_database")
+db = MySQLdb.connect(host="localhost", user="root",passwd="deb280794", db="temp_database")
 cur = db.cursor()
  
 def tempRead():
@@ -37,12 +37,18 @@ def tempRead():
  
 while True:
     x = ser.readline()
-    sensorValue = x
-    temp = sensorValue
+    f=x.split()
+    print f
+    moisture = f[1]
+    humidity = f[4]
+    temp = f[7]
+    
+    print moisture
+    print humidity
     print temp
     datetimeWrite = (time.strftime("%Y-%m-%d ") + time.strftime("%H:%M:%S"))
     #print datetimeWrite
-    #sql = ("""INSERT INTO tempLog (datetime,temperature) VALUES (%s,%s)""",(datetimeWrite,temp))
+    sql = ("""INSERT INTO tempLog (datetime,temperature,humidity,moisture) VALUES (%s,%s,%s,%s)""",(datetimeWrite,temp,humidity,moisture))
     try:
         print "Writing to database..."
         # Execute the SQL command
@@ -55,5 +61,6 @@ while True:
         # Rollback in case there is any error
         db.rollback()
         print "Failed writing to database"
- 
+
+    time.sleep(1)
     
